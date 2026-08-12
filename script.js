@@ -43,6 +43,58 @@ const areas = {
   },
 };
 
+const areaSubjects = {
+  familia: [
+    "Divórcio ou separação",
+    "Guarda e convivência com filhos",
+    "Pensão alimentícia",
+    "Inventário e partilha",
+    "Acordo familiar",
+  ],
+  idoso: [
+    "Proteção contra abuso ou negligência",
+    "Direitos da pessoa idosa",
+    "Conflito familiar envolvendo cuidado",
+    "Patrimônio da pessoa idosa",
+    "Orientação para familiares",
+  ],
+  consumidor: [
+    "Cobrança indevida",
+    "Problema com banco ou cartão",
+    "Produto ou serviço com defeito",
+    "Contrato abusivo",
+    "Negativação indevida",
+  ],
+  trabalho: [
+    "Rescisão ou verbas trabalhistas",
+    "Acordo trabalhista",
+    "Reconhecimento de vínculo",
+    "Documentos e provas",
+    "Dúvida sobre direitos",
+  ],
+  civil: [
+    "Contrato",
+    "Indenização ou dano",
+    "Cobrança",
+    "Conflito entre pessoas",
+    "Notificação ou acordo",
+  ],
+  patrimonio: [
+    "Organização de bens",
+    "Partilha patrimonial",
+    "Proteção patrimonial familiar",
+    "Contrato envolvendo patrimônio",
+    "Prevenção de riscos",
+  ],
+  consultoria: [
+    "Análise de documento",
+    "Prevenção de problema",
+    "Orientação antes de assinar contrato",
+    "Dúvida sobre qual caminho seguir",
+    "Outro assunto",
+  ],
+};
+
 const urgencyLabels = {
   urgente: "Urgência: resolver rápido",
   importante: "Urgência: organizar com cuidado",
@@ -50,9 +102,8 @@ const urgencyLabels = {
 };
 
 const modeLabels = {
-  whatsapp: "Preferência: WhatsApp",
-  online: "Preferência: atendimento online",
-  presencial: "Preferência: presencial em Muriaé",
+  whatsapp: "Encaminhamento: WhatsApp",
+  presencial: "Encaminhamento: WhatsApp para combinar atendimento presencial em Muriaé",
 };
 
 const answers = {
@@ -169,6 +220,11 @@ const chatSteps = [
     ],
   },
   {
+    message: "Dentro desse tema, qual assunto mais se aproxima do que você precisa?",
+    key: "subject",
+    options: (state) => (areaSubjects[state.area] || areaSubjects.consultoria).map((subject) => [subject]),
+  },
+  {
     message: "Esse assunto precisa de atenção rápida?",
     key: "urgency",
     options: [
@@ -187,12 +243,11 @@ const chatSteps = [
     ],
   },
   {
-    message: "Como prefere seguir o atendimento?",
+    message: "Como prefere seguir? O resumo será enviado pelo WhatsApp da Dra. Larissa.",
     key: "mode",
     options: [
-      ["whatsapp", "WhatsApp"],
-      ["online", "Atendimento online"],
-      ["presencial", "Presencial em Muriaé"],
+      ["whatsapp", "Enviar agora pelo WhatsApp"],
+      ["presencial", "Quero combinar atendimento presencial"],
     ],
   },
 ];
@@ -214,6 +269,7 @@ function renderChatStep() {
     const summary = [
       "Olá, Dra. Larissa. Conversei com o assistente do site.",
       `Tema indicado: ${area.label}.`,
+      `Assunto: ${chatState.subject || "a informar"}.`,
       `${urgencyLabels[chatState.urgency] || "Urgência: a definir"}.`,
       `Documentos: ${chatState.docs || "a informar"}.`,
       `${modeLabels[chatState.mode] || "Preferência: a definir"}.`,
@@ -243,7 +299,9 @@ function renderChatStep() {
   chatMessage.textContent = step.message;
   chatOptions.innerHTML = "";
 
-  step.options.forEach(([value, label]) => {
+  const options = typeof step.options === "function" ? step.options(chatState) : step.options;
+
+  options.forEach(([value, label]) => {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = label || value;
