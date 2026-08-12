@@ -28,8 +28,8 @@
       <a class="brand" href="#inicio" aria-label="Início">
         <img src="logo-larissa.webp" alt="Logo Larissa Cerqueira Advocacia" />
         <span class="brand-text">
-          <strong>Larissa Cerqueira</strong>
-          <span>Advogada | OAB/MG 117508</span>
+          <strong>Larissa Cerqueira Advocacia</strong>
+          <span>OAB/MG 117508</span>
         </span>
       </a>
       <nav class="nav" aria-label="Navegação principal">
@@ -103,6 +103,7 @@
               <button type="button" data-answer="consumidor">Compra, cobrança, banco ou serviço com problema</button>
               <button type="button" data-answer="trabalho">Situação de trabalho, acordo ou verba</button>
               <button type="button" data-answer="civil">Contrato, dano, conflito ou indenização</button>
+              <button type="button" data-answer="patrimonio">Patrimônio, bens ou organização patrimonial</button>
               <button type="button" data-answer="consultoria">Quero prevenir um problema antes que piore</button>
             </div>
           </div>
@@ -172,6 +173,9 @@
           <button class="map-node" type="button" data-node="civil">
             <span>Civil</span>
           </button>
+          <button class="map-node" type="button" data-node="patrimonio">
+            <span>Patrimônio</span>
+          </button>
           <button class="map-node" type="button" data-node="consultoria">
             <span>Consultoria</span>
           </button>
@@ -220,7 +224,7 @@
         </div>
         <div class="social-list">
           <button type="button">
-            <strong>OAB Social</strong>
+            <strong>Social</strong>
             <span>Ações e iniciativas voltadas ao cuidado com a comunidade.</span>
           </button>
           <button type="button">
@@ -316,11 +320,34 @@
     <footer class="footer">
       <div>
         <img src="logo-larissa.webp" alt="" aria-hidden="true" />
-        <strong>Larissa Cerqueira Advogada</strong>
+        <strong>Larissa Cerqueira Advocacia</strong>
         <span>OAB/MG 117508</span>
       </div>
       <p>Primeira versão interativa. Áreas, telefone e textos finais devem ser confirmados antes da publicação.</p>
     </footer>
+
+    <section class="chat-widget" data-chat-widget aria-live="polite">
+      <button class="chat-toggle" type="button" data-chat-toggle aria-expanded="false">
+        <span>Assistente</span>
+      </button>
+
+      <div class="chat-panel" data-chat-panel hidden>
+        <div class="chat-head">
+          <div>
+            <strong>Assistente da Dra. Larissa</strong>
+            <span>Triagem inicial antes do WhatsApp</span>
+          </div>
+          <button type="button" data-chat-close aria-label="Fechar assistente">×</button>
+        </div>
+
+        <div class="chat-body">
+          <div class="chat-message bot" data-chat-message>
+            Olá! Posso organizar seu caso em poucos passos. As informações são gerais e não substituem a análise da Dra. Larissa.
+          </div>
+          <div class="chat-options" data-chat-options></div>
+        </div>
+      </div>
+    </section>
 
     <script src="script.js"></script>
   </body>

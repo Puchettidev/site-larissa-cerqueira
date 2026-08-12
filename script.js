@@ -29,6 +29,12 @@ const areas = {
     text:
       "Atuação em contratos, indenizações, danos, cobranças, conflitos entre pessoas e organização jurídica de relações civis.",
   },
+  patrimonio: {
+    label: "Patrimônio",
+    title: "Organização e proteção de bens com segurança jurídica.",
+    text:
+      "Orientação sobre patrimônio familiar, bens, documentos, contratos, partilhas e medidas preventivas para reduzir riscos.",
+  },
   consultoria: {
     label: "Consultoria Jurídica",
     title: "Prevenir também é uma forma de defender direitos.",
@@ -147,3 +153,123 @@ document.querySelectorAll("[data-jump]").forEach((button) => {
 });
 
 showStep(1);
+
+const chatSteps = [
+  {
+    message: "Primeiro, qual tema mais parece com o seu caso?",
+    key: "area",
+    options: [
+      ["familia", "Família"],
+      ["idoso", "Pessoa idosa"],
+      ["consumidor", "Consumidor"],
+      ["trabalho", "Trabalho"],
+      ["civil", "Civil"],
+      ["patrimonio", "Patrimônio"],
+      ["consultoria", "Não sei ainda"],
+    ],
+  },
+  {
+    message: "Esse assunto precisa de atenção rápida?",
+    key: "urgency",
+    options: [
+      ["urgente", "Sim, é urgente"],
+      ["importante", "É importante, mas posso organizar"],
+      ["preventivo", "Quero evitar problemas"],
+    ],
+  },
+  {
+    message: "Você já tem documentos, prints, contrato ou alguma notificação sobre o caso?",
+    key: "docs",
+    options: [
+      ["Tenho documentos ou prints"],
+      ["Ainda não tenho documentos"],
+      ["Não tenho certeza"],
+    ],
+  },
+  {
+    message: "Como prefere seguir o atendimento?",
+    key: "mode",
+    options: [
+      ["whatsapp", "WhatsApp"],
+      ["online", "Atendimento online"],
+      ["presencial", "Presencial em Muriaé"],
+    ],
+  },
+];
+
+const chatState = {};
+let chatStepIndex = 0;
+
+const chatToggle = document.querySelector("[data-chat-toggle]");
+const chatClose = document.querySelector("[data-chat-close]");
+const chatPanel = document.querySelector("[data-chat-panel]");
+const chatMessage = document.querySelector("[data-chat-message]");
+const chatOptions = document.querySelector("[data-chat-options]");
+
+function renderChatStep() {
+  const step = chatSteps[chatStepIndex];
+
+  if (!step) {
+    const area = areas[chatState.area] || areas.consultoria;
+    const summary = [
+      "Olá, Dra. Larissa. Conversei com o assistente do site.",
+      `Tema indicado: ${area.label}.`,
+      `${urgencyLabels[chatState.urgency] || "Urgência: a definir"}.`,
+      `Documentos: ${chatState.docs || "a informar"}.`,
+      `${modeLabels[chatState.mode] || "Preferência: a definir"}.`,
+      "Gostaria de receber orientação sobre os próximos passos.",
+    ].join(" ");
+
+    chatMessage.textContent =
+      "Pronto. Organizei um resumo inicial para enviar pelo WhatsApp. A análise jurídica será feita pela Dra. Larissa.";
+    chatOptions.innerHTML = "";
+
+    const link = document.createElement("a");
+    link.className = "primary";
+    link.href = `https://wa.me/5532999304225?text=${encodeURIComponent(summary)}`;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "Enviar resumo pelo WhatsApp";
+    chatOptions.appendChild(link);
+
+    const restart = document.createElement("button");
+    restart.type = "button";
+    restart.textContent = "Refazer triagem";
+    restart.addEventListener("click", resetChat);
+    chatOptions.appendChild(restart);
+    return;
+  }
+
+  chatMessage.textContent = step.message;
+  chatOptions.innerHTML = "";
+
+  step.options.forEach(([value, label]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = label || value;
+    button.addEventListener("click", () => {
+      chatState[step.key] = value;
+      chatStepIndex += 1;
+      renderChatStep();
+    });
+    chatOptions.appendChild(button);
+  });
+}
+
+function resetChat() {
+  Object.keys(chatState).forEach((key) => delete chatState[key]);
+  chatStepIndex = 0;
+  renderChatStep();
+}
+
+chatToggle.addEventListener("click", () => {
+  const isOpening = chatPanel.hidden;
+  chatPanel.hidden = !isOpening;
+  chatToggle.setAttribute("aria-expanded", String(isOpening));
+  if (isOpening) renderChatStep();
+});
+
+chatClose.addEventListener("click", () => {
+  chatPanel.hidden = true;
+  chatToggle.setAttribute("aria-expanded", "false");
+});
