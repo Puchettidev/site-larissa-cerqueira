@@ -331,3 +331,32 @@ chatClose.addEventListener("click", () => {
   chatPanel.hidden = true;
   chatToggle.setAttribute("aria-expanded", "false");
 });
+
+const lectureCarousel = document.querySelector("[data-carousel]");
+
+if (lectureCarousel) {
+  const slides = Array.from(lectureCarousel.querySelectorAll("[data-slide]"));
+  const dots = Array.from(lectureCarousel.querySelectorAll("[data-carousel-dot]"));
+  const prevButton = lectureCarousel.querySelector("[data-carousel-prev]");
+  const nextButton = lectureCarousel.querySelector("[data-carousel-next]");
+  let activeSlide = 0;
+
+  function showLectureSlide(index) {
+    activeSlide = (index + slides.length) % slides.length;
+
+    slides.forEach((slide, slideIndex) => {
+      slide.classList.toggle("active", slideIndex === activeSlide);
+    });
+
+    dots.forEach((dot, dotIndex) => {
+      dot.classList.toggle("active", dotIndex === activeSlide);
+    });
+  }
+
+  prevButton.addEventListener("click", () => showLectureSlide(activeSlide - 1));
+  nextButton.addEventListener("click", () => showLectureSlide(activeSlide + 1));
+
+  dots.forEach((dot, dotIndex) => {
+    dot.addEventListener("click", () => showLectureSlide(dotIndex));
+  });
+}

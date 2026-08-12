@@ -575,32 +575,98 @@ h3 {
   padding: 56px 0;
 }
 
-.video-shell {
+.lecture-carousel {
+  position: relative;
+  overflow: hidden;
   padding: 12px;
   border: 1px solid rgba(184, 138, 74, 0.28);
   background: rgba(255, 253, 248, 0.72);
   box-shadow: var(--shadow);
 }
 
-.video-placeholder {
-  display: grid;
-  place-items: center;
-  min-height: 330px;
-  aspect-ratio: 16 / 10;
-  background:
-    linear-gradient(135deg, rgba(113, 31, 61, 0.88), rgba(53, 16, 31, 0.96)),
-    var(--wine-deep);
-  color: var(--ivory);
+.lecture-slide {
+  display: none;
+  position: relative;
+  min-height: 360px;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  overflow: hidden;
+  background: var(--wine-deep);
 }
 
-.video-placeholder span {
-  padding: 14px 18px;
-  border: 1px solid rgba(234, 216, 184, 0.28);
-  color: var(--gold-soft);
-  font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.lecture-slide.active {
+  display: block;
+}
+
+.lecture-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lecture-slide figcaption {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  padding: 12px 14px;
+  background: rgba(53, 16, 31, 0.78);
+  color: var(--ivory);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.carousel-controls > button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(113, 31, 61, 0.18);
+  border-radius: 50%;
+  background: var(--ivory);
+  color: var(--wine-deep);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.carousel-controls > button:hover {
+  transform: translateY(-2px);
+  background: rgba(184, 138, 74, 0.14);
+}
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.carousel-dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(113, 31, 61, 0.28);
+  cursor: pointer;
+}
+
+.carousel-dots button.active {
+  width: 26px;
+  border-radius: 999px;
+  background: var(--wine);
 }
 
 .lecture-copy p {
@@ -1469,6 +1535,17 @@ address {
 
   .lecture-section {
     padding: 28px 0 58px;
+  }
+
+  .lecture-slide {
+    min-height: 300px;
+  }
+
+  .lecture-slide figcaption {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    font-size: 0.84rem;
   }
 
   .question-card,
