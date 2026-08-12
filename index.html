@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Larissa Cerqueira Advogada</title>
+    <meta
+      name="description"
+      content="Advocacia humanizada, ética e estratégica em Muriaé e em todo o Brasil."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="Início">
+        <img src="logo larissa.png" alt="Logo Larissa Cerqueira Advocacia" />
+        <span class="brand-text">
+          <strong>Larissa Cerqueira</strong>
+          <span>Advogada | OAB/MG 117508</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#diagnostico">Diagnóstico</a>
+        <a href="#mapa">Mapa</a>
+        <a href="#social">Compromisso</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <a class="header-action" href="#diagnostico">Começar</a>
+    </header>
+
+    <main>
+      <section class="hero" id="inicio">
+        <div class="hero-copy">
+          <p class="eyebrow">Advocacia humanizada e estratégica</p>
+          <h1>Antes de falar com uma advogada, descubra o caminho jurídico para o seu momento.</h1>
+          <p class="hero-text">
+            Uma experiência interativa para orientar o primeiro passo. Responda
+            algumas perguntas, veja a área indicada e fale com a Dra. Larissa
+            com mais clareza sobre o que precisa.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#diagnostico">Iniciar diagnóstico</a>
+            <a class="btn secondary" href="#mapa">Ver áreas de ajuda</a>
+          </div>
+        </div>
+
+        <aside class="identity-panel" aria-label="Identidade visual">
+          <div class="portrait-orbit">
+            <div class="orbit-ring"></div>
+            <figure class="portrait-image">
+              <img src="larissa-hero.png" alt="Dra. Larissa Cerqueira sorrindo" />
+            </figure>
+            <button class="orbit-chip chip-one" type="button" data-jump="familia">Família</button>
+            <button class="orbit-chip chip-two" type="button" data-jump="idoso">Pessoa idosa</button>
+            <button class="orbit-chip chip-three" type="button" data-jump="consumidor">Consumidor</button>
+          </div>
+          <div class="quote-card">
+            <strong>Garantia de direitos é meu lema.</strong>
+            <span>Atendimento com escuta, técnica e coragem.</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="diagnostic-shell" id="diagnostico">
+        <div class="diagnostic-intro">
+          <p class="eyebrow">Diagnóstico interativo</p>
+          <h2>Responda como se fosse uma conversa inicial.</h2>
+          <p>
+            A ideia é reduzir a ansiedade do visitante. Ele não precisa saber
+            o nome da área jurídica; basta escolher o que está vivendo.
+          </p>
+        </div>
+
+        <div class="game-board" aria-live="polite">
+          <div class="progress-track" aria-hidden="true">
+            <span class="progress-dot active" data-step-dot="1">1</span>
+            <span class="progress-line"></span>
+            <span class="progress-dot" data-step-dot="2">2</span>
+            <span class="progress-line"></span>
+            <span class="progress-dot" data-step-dot="3">3</span>
+          </div>
+
+          <div class="question-card active" data-step="1">
+            <span class="step-label">Etapa 1 de 3</span>
+            <h3>O que melhor descreve o seu momento?</h3>
+            <div class="option-grid">
+              <button type="button" data-answer="familia">Separação, guarda, pensão ou inventário</button>
+              <button type="button" data-answer="idoso">Direitos de uma pessoa idosa ou familiar</button>
+              <button type="button" data-answer="consumidor">Compra, cobrança, banco ou serviço com problema</button>
+              <button type="button" data-answer="trabalho">Situação de trabalho, acordo ou verba</button>
+              <button type="button" data-answer="civil">Contrato, dano, conflito ou indenização</button>
+              <button type="button" data-answer="consultoria">Quero prevenir um problema antes que piore</button>
+            </div>
+          </div>
+
+          <div class="question-card" data-step="2">
+            <span class="step-label">Etapa 2 de 3</span>
+            <h3>Qual é o nível de urgência?</h3>
+            <div class="option-grid compact">
+              <button type="button" data-answer="urgente">Preciso resolver rápido</button>
+              <button type="button" data-answer="importante">É importante, mas posso organizar</button>
+              <button type="button" data-answer="preventivo">Quero orientação preventiva</button>
+            </div>
+          </div>
+
+          <div class="question-card" data-step="3">
+            <span class="step-label">Etapa 3 de 3</span>
+            <h3>Como você prefere ser atendido?</h3>
+            <div class="option-grid compact">
+              <button type="button" data-answer="whatsapp">Começar pelo WhatsApp</button>
+              <button type="button" data-answer="online">Agendar atendimento online</button>
+              <button type="button" data-answer="presencial">Atendimento presencial em Muriaé</button>
+            </div>
+          </div>
+
+          <div class="result-card" data-result hidden>
+            <span class="step-label">Direcionamento inicial</span>
+            <h3 data-result-title>Área indicada</h3>
+            <p data-result-text></p>
+            <div class="result-tags">
+              <span data-result-urgency></span>
+              <span data-result-mode></span>
+            </div>
+            <div class="hero-actions">
+              <a class="btn primary" data-whatsapp href="https://wa.me/5532999304225" target="_blank" rel="noreferrer">
+                Enviar meu caso
+              </a>
+              <button class="btn secondary" type="button" data-restart>Refazer diagnóstico</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="map-section" id="mapa">
+        <div class="map-copy">
+          <p class="eyebrow">Mapa de ajuda</p>
+          <h2>Escolha uma porta de entrada. O site responde com movimento.</h2>
+          <p>
+            Em vez de uma lista comum de áreas, cada tema funciona como ponto
+            de orientação. Ao clicar, a pessoa entende rapidamente onde a
+            advocacia pode ajudar.
+          </p>
+        </div>
+
+        <div class="legal-map">
+          <button class="map-node active" type="button" data-node="familia">
+            <span>Família</span>
+          </button>
+          <button class="map-node" type="button" data-node="idoso">
+            <span>Pessoa idosa</span>
+          </button>
+          <button class="map-node" type="button" data-node="consumidor">
+            <span>Consumidor</span>
+          </button>
+          <button class="map-node" type="button" data-node="trabalho">
+            <span>Trabalho</span>
+          </button>
+          <button class="map-node" type="button" data-node="civil">
+            <span>Civil</span>
+          </button>
+          <button class="map-node" type="button" data-node="consultoria">
+            <span>Consultoria</span>
+          </button>
+
+          <article class="map-result">
+            <span data-map-label>Direito de Família</span>
+            <h3 data-map-title>Quando a decisão envolve afeto, patrimônio e futuro.</h3>
+            <p data-map-text>
+              Orientação para divórcio, guarda, pensão, inventário e organização
+              de acordos familiares com cuidado e estratégia.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="story-section">
+        <div class="story-card">
+          <span>01</span>
+          <h3>Escuta</h3>
+          <p>O atendimento começa pela história da pessoa, não pelo juridiquês.</p>
+        </div>
+        <div class="story-card tall">
+          <span>02</span>
+          <h3>Estratégia</h3>
+          <p>Cada caso recebe uma leitura própria, com riscos, caminhos e próximos passos bem definidos.</p>
+        </div>
+        <div class="story-card">
+          <span>03</span>
+          <h3>Defesa</h3>
+          <p>Atuação técnica para proteger direitos com firmeza e responsabilidade.</p>
+        </div>
+      </section>
+
+      <section class="social-section" id="social">
+        <figure class="social-photo">
+          <img src="larissa-institucional.png" alt="Retrato institucional da Dra. Larissa Cerqueira" />
+        </figure>
+        <div class="social-copy">
+          <p class="eyebrow">Compromisso com a sociedade</p>
+          <h2>A presença social deixa a advocacia mais humana.</h2>
+          <p>
+            A trajetória de Larissa pode ser apresentada como uma extensão da
+            sua vocação jurídica: participar, ouvir e defender os direitos da
+            comunidade.
+          </p>
+        </div>
+        <div class="social-list">
+          <button type="button">
+            <strong>OAB Social</strong>
+            <span>Ações e iniciativas voltadas ao cuidado com a comunidade.</span>
+          </button>
+          <button type="button">
+            <strong>Pessoa idosa</strong>
+            <span>Debates e participação em pautas de proteção e dignidade.</span>
+          </button>
+          <button type="button">
+            <strong>Vida pública</strong>
+            <span>Informação institucional, sem tom eleitoral ou de campanha.</span>
+          </button>
+          <button type="button">
+            <strong>Direitos humanos</strong>
+            <span>Uma narrativa elegante sobre cidadania e responsabilidade social.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="content-lab">
+        <div>
+          <p class="eyebrow">Conteúdo inteligente</p>
+          <h2>Um blog pode nascer como uma central de respostas.</h2>
+        </div>
+        <div class="answer-strip">
+          <a href="#diagnostico">Tenho direito a pensão?</a>
+          <a href="#diagnostico">Como proteger uma pessoa idosa?</a>
+          <a href="#diagnostico">Quando fazer inventário?</a>
+          <a href="#diagnostico">Cobrança abusiva: o que fazer?</a>
+          <a href="#diagnostico">Como organizar um acordo?</a>
+        </div>
+      </section>
+
+      <section class="location-section" id="localizacao">
+        <div class="location-copy">
+          <p class="eyebrow">Localização</p>
+          <h2>Atendimento em Muriaé, com acesso fácil para clientes da região.</h2>
+          <p>
+            O escritório está localizado no Centro de Muriaé. Use o mapa para
+            visualizar o endereço e traçar a melhor rota até o atendimento.
+          </p>
+          <address>
+            Av. Juscelino Kubitschech, 1.349, sala 101<br />
+            Centro, Muriaé/MG - 36.880-001
+          </address>
+          <a
+            class="btn secondary"
+            href="https://www.google.com/maps/search/?api=1&query=Av.%20Juscelino%20Kubitschech%2C%201349%2C%20sala%20101%2C%20Centro%2C%20Muria%C3%A9%20MG%2C%2036880-001"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Abrir rota no Google Maps
+          </a>
+        </div>
+
+        <div class="map-embed" aria-label="Mapa com a localização do escritório">
+          <iframe
+            title="Mapa do escritório Larissa Cerqueira Advocacia"
+            src="https://www.google.com/maps?q=Av.%20Juscelino%20Kubitschech%2C%201349%2C%20sala%20101%2C%20Centro%2C%20Muria%C3%A9%20MG%2C%2036880-001&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </section>
+
+      <section class="contact" id="contato">
+        <div class="contact-photo">
+          <figure class="contact-image">
+            <img src="larissa-contato.png" alt="Dra. Larissa Cerqueira em retrato profissional" />
+          </figure>
+        </div>
+        <div class="contact-copy">
+          <p class="eyebrow">Contato</p>
+          <h2>Depois do primeiro clique, o próximo passo é conversar.</h2>
+          <p>
+            Envie uma mensagem com o resumo do caso. O atendimento pode ser
+            presencial em Muriaé ou online, conforme disponibilidade.
+          </p>
+          <div class="contact-actions">
+            <a class="btn primary" href="https://wa.me/5532999304225" target="_blank" rel="noreferrer">
+              Chamar no WhatsApp
+            </a>
+            <a class="btn secondary" href="https://www.instagram.com/larissacerqueira.muriae/" target="_blank" rel="noreferrer">
+              Instagram
+            </a>
+          </div>
+          <address>
+            Av. Juscelino Kubitschech, 1.349, sala 101<br />
+            Centro, Muriaé/MG - 36.880-001
+          </address>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <img src="logo larissa.png" alt="" aria-hidden="true" />
+        <strong>Larissa Cerqueira Advogada</strong>
+        <span>OAB/MG 117508</span>
+      </div>
+      <p>Primeira versão interativa. Áreas, telefone e textos finais devem ser confirmados antes da publicação.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
