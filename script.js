@@ -5,6 +5,24 @@ const areas = {
     text:
       "Orientação para divórcio, guarda, pensão, inventário e organização de acordos familiares, com cuidado e estratégia.",
   },
+  curatela: {
+    label: "Curatela",
+    title: "Proteção jurídica para decisões de cuidado e responsabilidade.",
+    text:
+      "Orientação sobre curatela, documentação, limites de atuação, proteção de patrimônio e acompanhamento familiar responsável.",
+  },
+  homecare: {
+    label: "Home care",
+    title: "Cuidado em casa também exige orientação e garantia de direitos.",
+    text:
+      "Análise de pedidos, negativas, contratos e documentos relacionados a atendimento domiciliar, continuidade de cuidado e cobertura de saúde.",
+  },
+  saude: {
+    label: "Direito da Saúde",
+    title: "Quando o acesso ao tratamento precisa de resposta jurídica.",
+    text:
+      "Apoio em situações envolvendo tratamento, medicamentos, exames, home care, negativas de cobertura e garantia de acesso à saúde.",
+  },
   idoso: {
     label: "Direito da Pessoa Idosa",
     title: "Proteção, dignidade e segurança para quem precisa de cuidado.",
@@ -45,11 +63,32 @@ const areas = {
 
 const areaSubjects = {
   familia: [
-    "Divórcio ou separação",
+    "Divórcio",
     "Guarda e convivência com filhos",
     "Pensão alimentícia",
     "Inventário e partilha",
     "Acordo familiar",
+  ],
+  curatela: [
+    "Pedido de curatela",
+    "Documentos necessários",
+    "Responsabilidade de familiares",
+    "Proteção de bens",
+    "Dúvida sobre cuidado e representação",
+  ],
+  homecare: [
+    "Pedido de home care",
+    "Negativa de cobertura",
+    "Continuidade de tratamento",
+    "Documentos médicos",
+    "Contrato ou plano de saúde",
+  ],
+  saude: [
+    "Negativa de tratamento",
+    "Medicamento ou exame",
+    "Home care",
+    "Plano de saúde",
+    "Urgência médica com impacto jurídico",
   ],
   idoso: [
     "Proteção contra abuso ou negligência",
@@ -213,6 +252,9 @@ const chatSteps = [
       ["familia", "Família"],
       ["idoso", "Pessoa idosa"],
       ["consumidor", "Consumidor"],
+      ["curatela", "Curatela"],
+      ["homecare", "Home care"],
+      ["saude", "Direito da Saúde"],
       ["trabalho", "Trabalho"],
       ["civil", "Civil"],
       ["patrimonio", "Patrimônio"],
