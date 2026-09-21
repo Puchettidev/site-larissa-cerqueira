@@ -227,13 +227,17 @@ function updateMap(key) {
   document.querySelector("[data-map-text]").textContent = area.text;
 
   document.querySelectorAll("[data-node]").forEach((node) => {
-    node.classList.toggle("active", node.dataset.node === key);
+    const isActive = node.dataset.node === key;
+    node.classList.toggle("active", isActive);
+    node.setAttribute("aria-pressed", String(isActive));
   });
 }
 
 document.querySelectorAll("[data-node]").forEach((button) => {
   button.addEventListener("click", () => updateMap(button.dataset.node));
 });
+
+updateMap("familia");
 
 document.querySelectorAll("[data-jump]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -391,7 +395,13 @@ if (lectureCarousel) {
     });
 
     dots.forEach((dot, dotIndex) => {
-      dot.classList.toggle("active", dotIndex === activeSlide);
+      const isActive = dotIndex === activeSlide;
+      dot.classList.toggle("active", isActive);
+      if (isActive) {
+        dot.setAttribute("aria-current", "true");
+      } else {
+        dot.removeAttribute("aria-current");
+      }
     });
   }
 
@@ -401,4 +411,6 @@ if (lectureCarousel) {
   dots.forEach((dot, dotIndex) => {
     dot.addEventListener("click", () => showLectureSlide(dotIndex));
   });
+
+  showLectureSlide(0);
 }

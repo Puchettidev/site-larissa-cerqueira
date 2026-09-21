@@ -665,20 +665,33 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0;
 }
 
 .carousel-dots button {
-  width: 9px;
-  height: 9px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
-  background: rgba(113, 31, 61, 0.28);
+  background: transparent;
   cursor: pointer;
 }
 
+.carousel-dots button::before {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(113, 31, 61, 0.28);
+  content: "";
+}
+
 .carousel-dots button.active {
+  width: 32px;
+}
+
+.carousel-dots button.active::before {
   width: 26px;
   border-radius: 999px;
   background: var(--wine);
