@@ -1403,7 +1403,7 @@ h3 {
   gap: 16px;
 }
 
-.social-list button {
+.social-list article {
   min-height: 200px;
   padding: 24px 28px;
   border: 1px solid rgba(234, 216, 184, 0.18);
@@ -1413,7 +1413,7 @@ h3 {
   transition: transform 180ms ease, background 180ms ease;
 }
 
-.social-list button:hover {
+.social-list article:hover {
   transform: translateY(-5px);
   background: rgba(255, 255, 255, 0.1);
 }
@@ -1757,7 +1757,7 @@ address {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .social-list button {
+  .social-list article {
     min-height: 180px;
   }
 
@@ -2385,7 +2385,7 @@ h3 {
 /* ---------- Card hover: lift + soft shadow (opacity only) ---------- */
 .reach-cards article,
 .story-card,
-.social-list button,
+.social-list article,
 .process-card {
   position: relative;
   transition: transform 200ms ease;
@@ -2393,7 +2393,7 @@ h3 {
 
 .reach-cards article::after,
 .story-card::after,
-.social-list button::after,
+.social-list article::after,
 .process-card::after {
   content: "";
   position: absolute;
@@ -2407,14 +2407,14 @@ h3 {
 
 .reach-cards article:hover,
 .story-card:hover,
-.social-list button:hover,
+.social-list article:hover,
 .process-card:hover {
   transform: translateY(-3px);
 }
 
 .reach-cards article:hover::after,
 .story-card:hover::after,
-.social-list button:hover::after,
+.social-list article:hover::after,
 .process-card:hover::after {
   opacity: 1;
 }
@@ -2832,7 +2832,7 @@ h3 {
 
   .reach-cards article:hover,
   .story-card:hover,
-  .social-list button:hover,
+  .social-list article:hover,
   .process-card:hover {
     transform: none;
   }
@@ -2882,5 +2882,359 @@ h3 {
     background: var(--gold);
     box-shadow: 0 0 0 4px rgba(184, 138, 74, 0.22);
     translate: 0 -50%;
+  }
+}
+
+/* ==================== Round 4: presence & polish ==================== */
+
+/* Same variable font file, one more instance for the refined headline. */
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond-latin.woff2") format("woff2");
+}
+
+/* ---------- Header: refined, letter-spaced navigation ---------- */
+.nav {
+  gap: 30px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 1360px) {
+  .site-header,
+  .hero {
+    width: min(1320px, calc(100% - 48px));
+  }
+}
+
+/* ---------- Hero ---------- */
+@media (min-width: 1041px) {
+  .hero {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    min-height: calc(100vh - 100px);
+    padding: 40px 0 0;
+  }
+}
+
+.portrait-orbit {
+  width: min(100%, 680px);
+}
+
+.hero h1 {
+  max-width: none;
+  margin-bottom: 0;
+  font-size: clamp(3rem, 3.4vw + 1rem, 5rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+
+.hero-name {
+  display: block;
+}
+
+.hero-role {
+  display: block;
+  margin-top: 0.5em;
+  color: var(--wine);
+  font-family: var(--sans);
+  font-size: clamp(0.82rem, 0.3vw + 0.75rem, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.hero-rule {
+  display: block;
+  width: 64px;
+  height: 1px;
+  margin: 30px 0 26px;
+  background: var(--gold);
+}
+
+.hero-text {
+  max-width: 46ch;
+}
+
+.hero-actions {
+  align-items: center;
+  gap: 28px;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--wine-deep);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.text-link svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 200ms ease;
+}
+
+.text-link:hover svg,
+.text-link:focus-visible svg {
+  transform: translateX(4px);
+}
+
+.hero-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 8px;
+  padding: 20px 0 26px;
+  border-top: 1px solid rgba(113, 31, 61, 0.14);
+}
+
+.hero-bar p {
+  margin: 0;
+}
+
+.hero-motto strong {
+  color: var(--wine-deep);
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.hero-motto span {
+  margin-left: 14px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hero-contact {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.hero-contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--wine-deep);
+}
+
+/* ---------- Orbit: bigger photo, livelier but calm motion ---------- */
+.portrait-orbit {
+  --chip-w: 150px;
+}
+
+.orbit-chip {
+  border-color: rgba(184, 138, 74, 0.55);
+  box-shadow: 0 10px 28px rgba(53, 16, 31, 0.12);
+  font-size: 0.82rem;
+  padding: 0 13px;
+}
+
+.orbit-wheel {
+  animation-duration: 48s;
+}
+
+.orbit-spin {
+  animation-duration: 48s;
+}
+
+.orbit-dashed {
+  animation-duration: 70s;
+}
+
+@container orbit (min-width: 470px) {
+  .orbit-ring {
+    border: 1.5px solid rgba(184, 138, 74, 0.6);
+    box-shadow: 0 0 24px rgba(184, 138, 74, 0.16), inset 0 0 24px rgba(184, 138, 74, 0.1);
+  }
+
+  .orbit-dashed {
+    border-color: rgba(184, 138, 74, 0.5);
+  }
+
+  .orbit-halo {
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(184, 138, 74, 0.4) 0,
+      rgba(234, 216, 184, 0.3) 24%,
+      rgba(184, 138, 74, 0.1) 38%,
+      transparent 52%
+    );
+  }
+
+  .orbit-satellite {
+    left: -6px;
+    top: -6px;
+    width: 12px;
+    height: 12px;
+    box-shadow: 0 0 0 7px rgba(184, 138, 74, 0.2), 0 0 18px rgba(184, 138, 74, 0.55);
+  }
+
+  .portrait-image {
+    border: 0;
+    box-shadow:
+      0 0 0 6px rgba(255, 253, 248, 0.9),
+      0 0 0 7.5px rgba(184, 138, 74, 0.75),
+      0 0 0 16px rgba(184, 138, 74, 0.1),
+      0 30px 70px rgba(53, 16, 31, 0.28);
+  }
+}
+
+/* ---------- Sobre: aligned commitment cards ---------- */
+.social-list {
+  counter-reset: commitment;
+  align-items: stretch;
+}
+
+.social-list article {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 0;
+  padding: 28px 26px 30px;
+  border: 1px solid rgba(234, 216, 184, 0.16);
+  border-top: 2px solid rgba(184, 138, 74, 0.7);
+  background: rgba(255, 255, 255, 0.045);
+  text-align: left;
+  counter-increment: commitment;
+}
+
+.social-list article::before {
+  content: counter(commitment, decimal-leading-zero);
+  margin-bottom: 16px;
+  color: var(--gold);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.social-list strong {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+.social-list span {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ---------- Como funciona: numbers and the paid step ---------- */
+.process-number {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-numeric: lining-nums;
+}
+
+.process-card:nth-child(2) {
+  border-color: rgba(113, 31, 61, 0.35);
+  box-shadow: inset 0 3px 0 var(--wine);
+}
+
+.process-card:nth-child(2) .process-number {
+  border-color: var(--wine);
+  color: var(--ivory);
+  background: var(--wine);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1040px) {
+  .hero-bar {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-bar {
+    order: 3;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .hero-motto span {
+    display: block;
+    margin: 4px 0 0;
+  }
+
+  .hero-actions {
+    gap: 8px;
+  }
+
+  .text-link {
+    justify-content: center;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.75rem, 10vw + 0.5rem, 3.4rem);
+  }
+
+  .hero-rule {
+    margin: 22px 0 20px;
+  }
+}
+
+.hero h1 {
+  font-size: clamp(3.25rem, 4.6vw + 1rem, 6.25rem);
+  line-height: 0.98;
+}
+
+.portrait-orbit {
+  width: min(100%, 640px);
+}
+
+@media (max-width: 720px) {
+  .hero h1 {
+    font-size: clamp(2.9rem, 11vw + 0.25rem, 3.6rem);
+  }
+}
+
+@media (min-width: 721px) {
+  /* Leave room for the floating assistant button. */
+  .hero-bar {
+    padding-right: 180px;
+  }
+}
+
+/* Seamless wine band (no lighter box inside it). */
+.social-section {
+  background: var(--wine-deep);
+}
+
+/* Keep chips clear of the photo's gold frame (frame ring is 7.5px). */
+@container orbit (min-width: 470px) {
+  .orbit-wheel {
+    --pw: calc(var(--r) * 2 - var(--chip-w) - 54px);
+    --ph: calc(var(--r) * 2 - var(--chip-h) - 130px);
+  }
+
+  .portrait-image {
+    width: calc(var(--r) * 2 - var(--chip-w) - 54px);
+    height: calc(var(--r) * 2 - var(--chip-h) - 130px);
   }
 }
