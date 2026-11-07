@@ -321,131 +321,100 @@ function arrangeMap() {
   legalMap.classList.add("is-radial");
 }
 
-const portraitOrbit = document.querySelector(".portrait-orbit");
-const orbitChips = [...portraitOrbit.querySelectorAll(".orbit-chip")];
+// Hero orbit: rotation lives in CSS; JS only eases the speed, pauses and
+// stops it while off-screen.
+const portraitOrbit = document.querySelector("[data-orbit]");
 const orbitToggle = portraitOrbit.querySelector("[data-orbit-toggle]");
-const mobileOrbit = window.matchMedia("(max-width: 720px)");
 const hoverOrbit = window.matchMedia("(hover: hover)");
-let orbitGeometry;
-const orbitPhase = -Math.PI * 5 / 6;
-const orbitDuration = 60000;
-let orbitAnimations = [];
-let orbitTime = 0;
-let orbitVisible = false;
+let orbitRate = 1;
+let orbitTarget = 1;
+let orbitFrame = 0;
 let orbitHovered = false;
 let orbitFocused = false;
-let orbitPaused = false;
 
-function orbitTransform(index, progress) {
-  const angle = orbitPhase + index * Math.PI * 2 / orbitChips.length + progress * Math.PI * 2;
-  const { width, height } = orbitGeometry.items[index];
-  const x = Math.cos(angle) * orbitGeometry.radiusX - width / 2;
-  const y = Math.sin(angle) * orbitGeometry.radiusY - height / 2;
-  const scale = 0.96 + Math.sin(angle) * 0.04;
-  return `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+function orbitAnimations() {
+  return portraitOrbit.getAnimations({ subtree: true }).filter((animation) =>
+    /^orbit-/.test(animation.animationName || ""),
+  );
 }
 
-function syncOrbit() {
-  const running = orbitGeometry && orbitVisible && !document.hidden &&
-    !reducedMotion.matches && !orbitPaused && !orbitHovered && !orbitFocused;
-  portraitOrbit.classList.toggle("is-moving", Boolean(running));
-  orbitAnimations.forEach((animation) => {
-    if (running && animation.playState !== "running") animation.play();
-    if (!running && animation.playState !== "paused") animation.pause();
-  });
-}
-
-function arrangeOrbit() {
-  orbitTime = orbitAnimations[0]?.currentTime ?? orbitTime;
-  orbitAnimations.forEach((animation) => animation.cancel());
-  orbitAnimations = [];
-  const fullOrbit = portraitOrbit.clientWidth >= 460 && !mobileOrbit.matches;
-  portraitOrbit.classList.toggle("is-orbiting", fullOrbit);
-  orbitToggle.hidden = !fullOrbit || reducedMotion.matches;
-  orbitGeometry = null;
-  if (fullOrbit) {
-    const items = orbitChips.map((chip) => ({ width: chip.offsetWidth, height: chip.offsetHeight }));
-    const radiusX = (portraitOrbit.clientWidth - Math.max(...items.map((item) => item.width))) / 2 - 12;
-    const radiusY = (portraitOrbit.clientHeight - Math.max(...items.map((item) => item.height))) / 2 - 20;
-    orbitGeometry = { radiusX, radiusY, items };
-    portraitOrbit.style.setProperty("--orbit-width", `${radiusX * 2}px`);
-    portraitOrbit.style.setProperty("--orbit-height", `${radiusY * 2}px`);
-    // Calculate the path only on resize; native transform interpolation runs without a JS frame loop.
-    orbitAnimations = orbitChips.map((chip, index) => {
-      chip.style.transform = orbitTransform(index, 0);
-      const keyframes = Array.from({ length: 241 }, (_, step) => ({ transform: orbitTransform(index, step / 240) }));
-      const animation = chip.animate(keyframes, { duration: orbitDuration, iterations: Infinity, easing: "linear" });
-      animation.pause();
-      animation.currentTime = orbitTime;
-      return animation;
+function easeOrbitTo(target) {
+  orbitTarget = target;
+  if (orbitFrame) return;
+  let last = performance.now();
+  const step = (now) => {
+    const delta = Math.min(64, now - last);
+    last = now;
+    orbitRate += (orbitTarget - orbitRate) * Math.min(1, delta / 260);
+    if (Math.abs(orbitTarget - orbitRate) < 0.01) orbitRate = orbitTarget;
+    orbitAnimations().forEach((animation) => {
+      animation.playbackRate = orbitRate;
     });
-  } else {
-    orbitChips.forEach((chip) => chip.style.removeProperty("transform"));
-  }
-  syncOrbit();
+    orbitFrame = orbitRate === orbitTarget ? 0 : requestAnimationFrame(step);
+  };
+  orbitFrame = requestAnimationFrame(step);
+}
+
+function syncOrbitSpeed() {
+  easeOrbitTo(orbitHovered || orbitFocused ? 0.2 : 1);
 }
 
 orbitToggle.addEventListener("click", () => {
-  orbitPaused = !orbitPaused;
-  const label = orbitPaused ? "Retomar movimento dos temas" : "Pausar movimento dos temas";
-  orbitToggle.setAttribute("aria-pressed", String(orbitPaused));
+  const paused = portraitOrbit.classList.toggle("is-paused");
+  const label = paused ? "Retomar movimento dos temas" : "Pausar movimento dos temas";
+  orbitToggle.setAttribute("aria-pressed", String(paused));
   orbitToggle.setAttribute("aria-label", label);
   orbitToggle.title = label;
-  orbitToggle.querySelector("[data-orbit-pause]").hidden = orbitPaused;
-  orbitToggle.querySelector("[data-orbit-play]").hidden = !orbitPaused;
-  syncOrbit();
+  orbitToggle.querySelector("[data-orbit-pause]").hidden = paused;
+  orbitToggle.querySelector("[data-orbit-play]").hidden = !paused;
 });
 
 portraitOrbit.addEventListener("pointerenter", (event) => {
   orbitHovered = hoverOrbit.matches && event.pointerType !== "touch";
-  syncOrbit();
+  syncOrbitSpeed();
 });
 portraitOrbit.addEventListener("pointerleave", () => {
   orbitHovered = false;
-  syncOrbit();
+  syncOrbitSpeed();
 });
-portraitOrbit.addEventListener("focusin", () => {
-  orbitFocused = portraitOrbit.contains(document.activeElement) && document.activeElement !== orbitToggle;
-  syncOrbit();
+portraitOrbit.addEventListener("focusin", (event) => {
+  orbitFocused = event.target.classList.contains("orbit-chip");
+  syncOrbitSpeed();
 });
 portraitOrbit.addEventListener("focusout", (event) => {
-  orbitFocused = portraitOrbit.contains(event.relatedTarget) && event.relatedTarget !== orbitToggle;
-  syncOrbit();
+  orbitFocused = Boolean(event.relatedTarget?.classList?.contains("orbit-chip"));
+  syncOrbitSpeed();
 });
-document.addEventListener("visibilitychange", syncOrbit);
-reducedMotion.addEventListener("change", () => {
-  mapTransition?.cancel();
-  arrangeOrbit();
-});
-mobileOrbit.addEventListener("change", arrangeOrbit);
 
-const orbitVisibility = new IntersectionObserver(([entry]) => {
-  orbitVisible = entry.isIntersecting;
-  syncOrbit();
-});
-orbitVisibility.observe(portraitOrbit);
+new IntersectionObserver(([entry]) => {
+  portraitOrbit.classList.toggle("is-offscreen", !entry.isIntersecting);
+}).observe(portraitOrbit);
 
+reducedMotion.addEventListener("change", () => mapTransition?.cancel());
+
+// The map is measured once its width is known and again only if the web
+// fonts arrive after that first measurement (text metrics change).
 let mapWidth = 0;
-let orbitWidth = 0;
-const geometryObserver = new ResizeObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.target === legalMap && entry.contentRect.width !== mapWidth) {
-      mapWidth = entry.contentRect.width;
-      arrangeMap();
-    }
-    if (entry.target === portraitOrbit && entry.contentRect.width !== orbitWidth) {
-      orbitWidth = entry.contentRect.width;
-      arrangeOrbit();
-    }
-  });
-});
-geometryObserver.observe(legalMap);
-geometryObserver.observe(portraitOrbit);
-arrangeMap();
-arrangeOrbit();
-document.fonts.ready.then(() => {
+let mapMeasuredWithFonts = false;
+function arrangeMapOnce() {
+  mapMeasuredWithFonts =
+    document.fonts.check('600 16px "Cormorant Garamond"') && document.fonts.check("600 16px Inter");
   arrangeMap();
-  arrangeOrbit();
+}
+// The first arrangement happens in its own task (keeps script evaluation
+// short) with transitions off, so the nodes do not animate into place.
+legalMap.classList.add("is-settling");
+new ResizeObserver(([entry]) => {
+  if (Math.abs(entry.contentRect.width - mapWidth) > 0.5) {
+    mapWidth = entry.contentRect.width;
+    arrangeMapOnce();
+  }
+  if (legalMap.classList.contains("is-settling")) {
+    requestAnimationFrame(() => requestAnimationFrame(() => legalMap.classList.remove("is-settling")));
+  }
+}).observe(legalMap);
+document.fonts.ready.then(() => {
+  if (!mapMeasuredWithFonts) arrangeMapOnce();
 });
 
 document.querySelectorAll("[data-jump]").forEach((button) => {
@@ -454,6 +423,53 @@ document.querySelectorAll("[data-jump]").forEach((button) => {
     document.querySelector("#mapa").scrollIntoView({ behavior: reducedMotion.matches ? "instant" : "smooth" });
   });
 });
+
+// Google Maps iframe only loads when its section approaches the viewport.
+const mapFrame = document.querySelector(".compact-map iframe[data-src]");
+if (mapFrame) {
+  const loadMap = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) return;
+    mapFrame.src = mapFrame.dataset.src;
+    mapFrame.removeAttribute("data-src");
+    loadMap.disconnect();
+  }, { rootMargin: "300px 0px" });
+  loadMap.observe(mapFrame);
+}
+
+// Sections fade up as they enter the viewport.
+if (!reducedMotion.matches && "IntersectionObserver" in window) {
+  const revealTargets = [...document.querySelectorAll("main > section:not(.hero)")];
+  const reveal = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      reveal.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  revealTargets.forEach((section) => {
+    section.classList.add("reveal");
+    reveal.observe(section);
+  });
+}
+
+// On phones, keep the assistant out of the way of the hero and contact buttons.
+const chatWidget = document.querySelector("[data-chat-widget]");
+const phone = window.matchMedia("(max-width: 720px)");
+const guardedSections = [document.querySelector(".hero"), document.querySelector("#contato")];
+const guardedVisible = new Set();
+function syncChatTuck() {
+  const panelOpen = !document.querySelector("[data-chat-panel]").hidden;
+  chatWidget.classList.toggle("is-tucked", phone.matches && !panelOpen && guardedVisible.size > 0);
+}
+const chatGuard = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) guardedVisible.add(entry.target);
+    else guardedVisible.delete(entry.target);
+  });
+  syncChatTuck();
+});
+guardedSections.filter(Boolean).forEach((section) => chatGuard.observe(section));
+phone.addEventListener("change", syncChatTuck);
 
 showStep(1);
 
@@ -580,11 +596,13 @@ chatToggle.addEventListener("click", () => {
   chatPanel.hidden = !isOpening;
   chatToggle.setAttribute("aria-expanded", String(isOpening));
   if (isOpening) renderChatStep();
+  syncChatTuck();
 });
 
 chatClose.addEventListener("click", () => {
   chatPanel.hidden = true;
   chatToggle.setAttribute("aria-expanded", "false");
+  syncChatTuck();
 });
 
 const lectureCarousel = document.querySelector("[data-carousel]");

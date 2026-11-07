@@ -49,7 +49,7 @@ async function geometry(page) {
     return {
       overflow: document.documentElement.scrollWidth > innerWidth,
       radial: document.querySelector(".legal-map").classList.contains("is-radial"),
-      orbiting: document.querySelector(".portrait-orbit").classList.contains("is-orbiting"),
+      orbiting: getComputedStyle(document.querySelector(".orbit-ring")).display !== "none",
       collisions,
       clippedLabels: labels.filter((label) => label.scrollWidth > label.clientWidth + 1 || label.scrollHeight > label.clientHeight + 1).map((label) => label.textContent),
       unloadedImages: [...document.querySelectorAll(".portrait-image img")].filter((img) => !img.complete || !img.naturalWidth).length,
@@ -58,10 +58,12 @@ async function geometry(page) {
   });
 }
 
+
 async function orbitSnapshot(page) {
   return page.evaluate(() => ({
-    phase: orbitAnimations[0]?.currentTime,
-    scheduled: orbitAnimations.some((animation) => animation.playState === "running"),
+    phase: document.querySelector("[data-orbit]").getAnimations({ subtree: true }).find((animation) => animation.animationName === "orbit-turn")?.currentTime,
+    rate: document.querySelector("[data-orbit]").getAnimations({ subtree: true })[0]?.playbackRate,
+    scheduled: document.querySelector("[data-orbit]").getAnimations({ subtree: true }).some((animation) => animation.playState === "running"),
     transforms: [...document.querySelectorAll(".orbit-chip")].map((chip) => getComputedStyle(chip).transform),
     photo: document.querySelector(".portrait-image").getBoundingClientRect().toJSON(),
   }));
@@ -69,6 +71,8 @@ async function orbitSnapshot(page) {
 
 async function checkOrbitCycle(page) {
   return page.evaluate(() => {
+    const orbitAnimations = document.querySelector("[data-orbit]").getAnimations({ subtree: true });
+    const orbitDuration = 80000;
     const times = orbitAnimations.map((animation) => animation.currentTime);
     orbitAnimations.forEach((animation) => animation.pause());
     const issues = [];
@@ -89,8 +93,7 @@ async function checkOrbitCycle(page) {
         chips.slice(index + 1).forEach((other) => { if (overlap(rect, other.rect)) issues.push(`${name}/${other.name}/${step}`); });
       });
     }
-    orbitAnimations.forEach((animation, index) => { animation.currentTime = times[index]; });
-    syncOrbit();
+    orbitAnimations.forEach((animation, index) => { animation.currentTime = times[index]; animation.play(); });
     return issues;
   });
 }
@@ -165,18 +168,19 @@ async function performanceSample(browser, url) {
     assert.deepEqual(first.photo, moved.photo, "Photo moved");
 
     await page.locator(".portrait-image").hover();
-    await page.locator(".orbit-chip").first().hover();
+    await page.locator(".orbit-chip").first().hover({ force: true });
+    await page.waitForTimeout(1500);
     const hovered = await orbitSnapshot(page);
+    assert.ok(hovered.rate < 0.25, "Hover did not slow the orbit");
     await page.waitForTimeout(250);
-    assert.equal((await orbitSnapshot(page)).phase, hovered.phase, "Hover did not pause orbit");
+    assert.notEqual((await orbitSnapshot(page)).phase, hovered.phase, "Hover stopped the orbit dead");
     await page.mouse.move(0, 0);
-    await page.waitForTimeout(150);
-    assert.notEqual((await orbitSnapshot(page)).phase, hovered.phase, "Orbit did not resume");
+    await page.waitForTimeout(1500);
+    assert.ok((await orbitSnapshot(page)).rate > 0.95, "Orbit did not speed back up");
 
     await page.locator(".orbit-chip").first().focus();
-    const focused = await orbitSnapshot(page);
-    await page.waitForTimeout(250);
-    assert.equal((await orbitSnapshot(page)).phase, focused.phase, "Focus did not pause orbit");
+    await page.waitForTimeout(1500);
+    assert.ok((await orbitSnapshot(page)).rate < 0.25, "Focus did not slow the orbit");
     await page.keyboard.press("Enter");
     await page.waitForTimeout(800);
     assert.equal(await page.locator('[data-node="familia"]').getAttribute("aria-pressed"), "true");
@@ -201,7 +205,7 @@ async function performanceSample(browser, url) {
     assert.ok(Math.abs(resumed.phase - paused.phase) < 400, "Resume jumped or reset");
 
     // Sample a full revolution, including face clearance and every pair of labels.
-    await page.evaluate(() => { orbitPaused = true; syncOrbit(); });
+    await page.locator("[data-orbit-toggle]").click();
     const orbitIssues = await checkOrbitCycle(page);
     console.log("Full orbit issues", orbitIssues);
     assert.deepEqual(orbitIssues, []);
