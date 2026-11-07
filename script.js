@@ -234,6 +234,11 @@ function updateMap(key) {
   mapResult.querySelector("[data-map-label]").textContent = area.label;
   mapResult.querySelector("[data-map-title]").textContent = area.title;
   mapResult.querySelector("[data-map-text]").textContent = area.text;
+  const mapWhatsapp = mapResult.querySelector("[data-map-whatsapp]");
+  if (mapWhatsapp) {
+    const text = `Olá, Dra. Larissa. Vim pelo site e gostaria de conversar sobre ${area.label}.`;
+    mapWhatsapp.href = `https://wa.me/5532999304225?text=${encodeURIComponent(text)}`;
+  }
 
   mapNodes.forEach((node) => {
     const isActive = node.dataset.node === selectedKey;
@@ -657,31 +662,77 @@ if (lectureCarousel) {
   const dots = Array.from(lectureCarousel.querySelectorAll("[data-carousel-dot]"));
   const prevButton = lectureCarousel.querySelector("[data-carousel-prev]");
   const nextButton = lectureCarousel.querySelector("[data-carousel-next]");
+  const stage = lectureCarousel.querySelector("[data-carousel-stage]");
+  const current = lectureCarousel.querySelector("[data-carousel-current]");
+  const autoplayDelay = 6000;
   let activeSlide = 0;
+  let autoplayTimer = 0;
+  let carouselVisible = false;
+  let carouselHeld = false;
 
   function showLectureSlide(index) {
+    const previous = activeSlide;
     activeSlide = (index + slides.length) % slides.length;
 
     slides.forEach((slide, slideIndex) => {
       slide.classList.toggle("active", slideIndex === activeSlide);
+      slide.classList.toggle("leaving", slideIndex === previous && previous !== activeSlide);
+      slide.setAttribute("aria-hidden", String(slideIndex !== activeSlide));
     });
 
     dots.forEach((dot, dotIndex) => {
       const isActive = dotIndex === activeSlide;
       dot.classList.toggle("active", isActive);
-      if (isActive) {
-        dot.setAttribute("aria-current", "true");
-      } else {
-        dot.removeAttribute("aria-current");
-      }
+      if (isActive) dot.setAttribute("aria-current", "true");
+      else dot.removeAttribute("aria-current");
     });
+
+    if (current) current.textContent = String(activeSlide + 1).padStart(2, "0");
+    restartAutoplay();
+  }
+
+  function restartAutoplay() {
+    clearTimeout(autoplayTimer);
+    lectureCarousel.classList.remove("is-timing");
+    const canPlay = carouselVisible && !carouselHeld && !reducedMotion.matches && !document.hidden;
+    if (!canPlay) return;
+    // Restart the progress bar on the active dot.
+    void lectureCarousel.offsetWidth;
+    lectureCarousel.classList.add("is-timing");
+    autoplayTimer = setTimeout(() => showLectureSlide(activeSlide + 1), autoplayDelay);
   }
 
   prevButton.addEventListener("click", () => showLectureSlide(activeSlide - 1));
   nextButton.addEventListener("click", () => showLectureSlide(activeSlide + 1));
+  dots.forEach((dot, dotIndex) => dot.addEventListener("click", () => showLectureSlide(dotIndex)));
 
-  dots.forEach((dot, dotIndex) => {
-    dot.addEventListener("click", () => showLectureSlide(dotIndex));
+  // Pause while the visitor is looking closely or using the controls.
+  lectureCarousel.addEventListener("pointerenter", () => { carouselHeld = true; restartAutoplay(); });
+  lectureCarousel.addEventListener("pointerleave", () => { carouselHeld = false; restartAutoplay(); });
+  lectureCarousel.addEventListener("focusin", () => { carouselHeld = true; restartAutoplay(); });
+  lectureCarousel.addEventListener("focusout", (event) => {
+    if (lectureCarousel.contains(event.relatedTarget)) return;
+    carouselHeld = false;
+    restartAutoplay();
+  });
+  document.addEventListener("visibilitychange", restartAutoplay);
+  new IntersectionObserver(([entry]) => {
+    carouselVisible = entry.isIntersecting;
+    restartAutoplay();
+  }, { threshold: 0.35 }).observe(lectureCarousel);
+
+  // Swipe on touch screens.
+  let swipeStart = null;
+  stage.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse") return;
+    swipeStart = { x: event.clientX, y: event.clientY };
+  });
+  stage.addEventListener("pointerup", (event) => {
+    if (!swipeStart) return;
+    const dx = event.clientX - swipeStart.x;
+    const dy = event.clientY - swipeStart.y;
+    swipeStart = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) showLectureSlide(activeSlide + (dx < 0 ? 1 : -1));
   });
 
   showLectureSlide(0);
