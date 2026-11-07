@@ -13,7 +13,7 @@ const areas = {
   },
   homecare: {
     label: "Home care",
-    title: "Cuidado em casa também exige orientação e garantia de direitos.",
+    title: "Cuidado em casa também envolve direitos que merecem orientação.",
     text:
       "Análise de pedidos, negativas, contratos e documentos relacionados a atendimento domiciliar, continuidade de cuidado e cobertura de saúde.",
   },
@@ -21,7 +21,7 @@ const areas = {
     label: "Direito da Saúde",
     title: "Quando o acesso ao tratamento precisa de resposta jurídica.",
     text:
-      "Apoio em situações envolvendo tratamento, medicamentos, exames, home care, negativas de cobertura e garantia de acesso à saúde.",
+      "Apoio em situações envolvendo tratamento, medicamentos, exames, home care, negativas de cobertura e acesso à saúde.",
   },
   idoso: {
     label: "Direito da Pessoa Idosa",
@@ -135,7 +135,7 @@ const areaSubjects = {
 };
 
 const urgencyLabels = {
-  urgente: "Urgência: resolver rápido",
+  urgente: "Urgência: atenção rápida",
   importante: "Urgência: organizar com cuidado",
   preventivo: "Urgência: prevenir riscos",
 };
@@ -180,7 +180,7 @@ function showResult() {
     modeLabels[answers.mode] || "Preferência: a definir";
 
   const message = [
-    "Olá, Dra. Larissa. Vim pelo site e fiz o diagnóstico inicial.",
+    "Olá, Dra. Larissa. Vim pelo site e fiz a orientação inicial.",
     `Área indicada: ${area.label}.`,
     `${urgencyLabels[answers.urgency] || "Urgência: a definir"}.`,
     `${modeLabels[answers.mode] || "Preferência: a definir"}.`,
@@ -532,7 +532,7 @@ function renderChatStep() {
     ].join(" ");
 
     chatMessage.textContent =
-      "Pronto. Organizei um resumo inicial para enviar pelo WhatsApp. A análise jurídica será feita pela Dra. Larissa.";
+      "Pronto. Organizei um resumo inicial para enviar pelo WhatsApp. A análise do caso é feita em consulta agendada com a Dra. Larissa; valores e horários são informados no primeiro contato.";
     chatOptions.innerHTML = "";
 
     const link = document.createElement("a");
