@@ -209,12 +209,12 @@
               <span class="orbit-satellite" aria-hidden="true"></span>
               <span class="orbit-satellite" aria-hidden="true"></span>
               <div class="orbit-topics" role="group" aria-label="Atalhos para os temas do mapa de ajuda">
-                <span class="orbit-slot" style="--i: 0"><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="familia"><svg aria-hidden="true"><use href="#i-users"></use></svg>Família</button></span></span>
-                <span class="orbit-slot" style="--i: 1"><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="idoso"><svg aria-hidden="true"><use href="#i-heart"></use></svg>Pessoa idosa</button></span></span>
-                <span class="orbit-slot" style="--i: 2"><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="consumidor"><svg aria-hidden="true"><use href="#i-bag"></use></svg>Consumidor</button></span></span>
-                <span class="orbit-slot" style="--i: 3"><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="curatela"><svg aria-hidden="true"><use href="#i-shield"></use></svg>Curatela</button></span></span>
-                <span class="orbit-slot" style="--i: 4"><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="homecare"><svg aria-hidden="true"><use href="#i-house"></use></svg>Home care</button></span></span>
-                <span class="orbit-slot" style="--i: 5"><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="saude"><svg aria-hidden="true"><use href="#i-stethoscope"></use></svg>Direito da Saúde</button></span></span>
+                <span class="orbit-slot" style="--i: 0"><span class="orbit-link" aria-hidden="true"></span><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="familia"><svg aria-hidden="true"><use href="#i-users"></use></svg>Família</button></span></span>
+                <span class="orbit-slot" style="--i: 1"><span class="orbit-link" aria-hidden="true"></span><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="idoso"><svg aria-hidden="true"><use href="#i-heart"></use></svg>Pessoa idosa</button></span></span>
+                <span class="orbit-slot" style="--i: 2"><span class="orbit-link" aria-hidden="true"></span><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="consumidor"><svg aria-hidden="true"><use href="#i-bag"></use></svg>Consumidor</button></span></span>
+                <span class="orbit-slot" style="--i: 3"><span class="orbit-link" aria-hidden="true"></span><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="curatela"><svg aria-hidden="true"><use href="#i-shield"></use></svg>Curatela</button></span></span>
+                <span class="orbit-slot" style="--i: 4"><span class="orbit-link" aria-hidden="true"></span><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="homecare"><svg aria-hidden="true"><use href="#i-house"></use></svg>Home care</button></span></span>
+                <span class="orbit-slot" style="--i: 5"><span class="orbit-link" aria-hidden="true"></span><span class="orbit-spin"><button class="orbit-chip" type="button" data-jump="saude"><svg aria-hidden="true"><use href="#i-stethoscope"></use></svg>Direito da Saúde</button></span></span>
               </div>
             </div>
             <figure class="portrait-image">
@@ -415,14 +415,13 @@
               <span data-result-urgency></span>
               <span data-result-mode></span>
             </div>
-            <p class="result-next">
-              Para analisar o seu caso com a atenção que ele merece, o próximo
-              passo é uma consulta agendada. Os valores e horários são
-              informados no primeiro contato.
-            </p>
             <p class="result-disclaimer">
               Este direcionamento é apenas uma referência inicial e não
               substitui a consulta com a advogada.
+            </p>
+            <p class="result-next">
+              <strong>Próximo passo: agendar uma consulta jurídica (paga).</strong>
+              Valores e horários são informados no primeiro contato.
             </p>
             <div class="hero-actions">
               <a class="btn primary" data-whatsapp href="https://wa.me/5532999304225?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noreferrer">
@@ -508,12 +507,39 @@
       </section>
 
       <section class="social-section" id="sobre" aria-labelledby="sobre-titulo">
-        <figure class="social-photo">
-          <img src="larissa-institucional-600.webp" srcset="larissa-institucional-400.webp 400w, larissa-institucional-600.webp 600w, larissa-institucional-900.webp 900w" sizes="(max-width: 720px) min(420px, calc(100vw - 68px)), 290px" alt="Retrato institucional da Dra. Larissa Cerqueira" width="900" height="1352" loading="lazy" decoding="async" />
-        </figure>
+        <div class="about-video" data-video>
+          <video
+            preload="none"
+            playsinline
+            width="720"
+            height="1280"
+            aria-label="Vídeo de apresentação da Dra. Larissa Cerqueira"
+            data-video-player
+          >
+            <source src="larissa-apresentacao.webm" type="video/webm" />
+            <source src="larissa-apresentacao.mp4" type="video/mp4" />
+            <track kind="captions" src="larissa-apresentacao.vtt" srclang="pt-BR" label="Português" />
+          </video>
+          <button class="video-cover" type="button" data-video-play aria-label="Assistir ao vídeo de apresentação da Dra. Larissa, 31 segundos">
+            <img
+              src="larissa-video-capa-360.webp"
+              srcset="larissa-video-capa-360.webp 360w, larissa-video-capa-720.webp 720w"
+              sizes="(max-width: 720px) min(300px, 80vw), 290px"
+              alt=""
+              width="720"
+              height="1280"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="video-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5Z" /></svg>
+            </span>
+            <span class="video-duration" aria-hidden="true">0:31</span>
+          </button>
+        </div>
         <div class="social-copy">
           <p class="eyebrow">Sobre a Dra. Larissa</p>
-          <h2 id="sobre-titulo">Uma advocacia presente na comunidade.</h2>
+          <h2 id="sobre-titulo">Conheça a Dra. Larissa</h2>
           <p>
             Larissa Cerqueira é advogada inscrita na OAB/MG sob o nº 117508,
             com escritório no Centro de Muriaé/MG.
@@ -614,6 +640,40 @@
         </div>
       </section>
 
+      <section class="process-section" id="como-funciona" aria-labelledby="como-funciona-titulo">
+        <div class="process-intro">
+          <p class="eyebrow">Transparência desde o início</p>
+          <h2 id="como-funciona-titulo">Como funciona o atendimento</h2>
+          <p>Três etapas claras, para você saber o que esperar antes de cada uma.</p>
+        </div>
+        <ol class="process-steps">
+          <li class="process-card">
+            <span class="process-number" aria-hidden="true">1</span>
+            <h3>Primeiro contato</h3>
+            <span class="process-tag">Sem custo</span>
+            <p>Envie um resumo da sua situação pelo WhatsApp.</p>
+          </li>
+          <li class="process-card">
+            <span class="process-number" aria-hidden="true">2</span>
+            <h3>Consulta jurídica</h3>
+            <span class="process-tag process-tag-paid">Paga</span>
+            <p>
+              Agendamos um horário para analisar seu caso. O valor segue a
+              Tabela da OAB/MG e é informado no agendamento.
+            </p>
+          </li>
+          <li class="process-card">
+            <span class="process-number" aria-hidden="true">3</span>
+            <h3>Proposta de atuação</h3>
+            <span class="process-tag">Por escrito</span>
+            <p>
+              Se for necessário atuar no caso, você recebe uma proposta de
+              honorários por escrito.
+            </p>
+          </li>
+        </ol>
+      </section>
+
       <section class="contact" id="contato">
         <div class="contact-photo">
           <figure class="contact-image">
@@ -661,26 +721,28 @@
       </p>
     </footer>
 
-    <section class="chat-widget" data-chat-widget aria-live="polite">
+    <div class="chat-backdrop" data-chat-backdrop hidden></div>
+    <section class="chat-widget" data-chat-widget aria-label="Assistente de contato">
       <button class="chat-toggle" type="button" data-chat-toggle aria-expanded="false" aria-label="Abrir assistente">
         <svg aria-hidden="true"><use href="#i-chat"></use></svg>
         <span class="chat-toggle-label">Assistente</span>
       </button>
 
-      <div class="chat-panel" data-chat-panel hidden>
+      <div class="chat-panel" data-chat-panel role="dialog" aria-labelledby="chat-title" hidden>
         <div class="chat-head">
           <div>
-            <strong>Assistente da Dra. Larissa</strong>
-            <span>Triagem inicial antes do WhatsApp</span>
+            <strong id="chat-title">Assistente de contato</strong>
+            <span data-chat-progress>Resumo do seu caso para o WhatsApp</span>
           </div>
-          <button type="button" data-chat-close aria-label="Fechar assistente">×</button>
+          <button type="button" data-chat-close aria-label="Fechar assistente">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
         </div>
 
         <div class="chat-body">
-          <div class="chat-message bot" data-chat-message>
-            Olá! Posso organizar seu caso em poucos passos. As informações são gerais e não substituem a análise da Dra. Larissa.
-          </div>
+          <div class="chat-message bot" data-chat-message aria-live="polite"></div>
           <div class="chat-options" data-chat-options></div>
+          <p class="chat-note">As informações são gerais e não substituem a análise da Dra. Larissa.</p>
         </div>
       </div>
     </section>

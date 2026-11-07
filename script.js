@@ -475,7 +475,7 @@ showStep(1);
 
 const chatSteps = [
   {
-    message: "Primeiro, qual tema mais parece com o seu caso?",
+    message: "Sobre qual tema você quer falar?",
     key: "area",
     options: [
       ["familia", "Família"],
@@ -524,17 +524,57 @@ const chatSteps = [
 ];
 
 const chatState = {};
-let chatStepIndex = 0;
+let chatStepIndex = -1;
+let chatOpener = null;
 
 const chatToggle = document.querySelector("[data-chat-toggle]");
 const chatClose = document.querySelector("[data-chat-close]");
 const chatPanel = document.querySelector("[data-chat-panel]");
+const chatBackdrop = document.querySelector("[data-chat-backdrop]");
 const chatMessage = document.querySelector("[data-chat-message]");
 const chatOptions = document.querySelector("[data-chat-options]");
+const chatProgress = document.querySelector("[data-chat-progress]");
+const chatWhatsappBase = "https://wa.me/5532999304225?text=";
+
+function chatButton(label, onClick, className = "") {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = label;
+  if (className) button.className = className;
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+function chatLink(label, text) {
+  const link = document.createElement("a");
+  link.className = "primary";
+  link.href = chatWhatsappBase + encodeURIComponent(text);
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  link.textContent = label;
+  return link;
+}
+
+function focusFirstChatOption() {
+  chatOptions.querySelector("button, a")?.focus({ preventScroll: true });
+}
 
 function renderChatStep() {
-  const step = chatSteps[chatStepIndex];
+  chatOptions.innerHTML = "";
+  chatOptions.classList.remove("is-stacked");
 
+  if (chatStepIndex === -1) {
+    chatProgress.textContent = "Resumo do seu caso para o WhatsApp";
+    chatMessage.textContent = "Olá! Posso te ajudar a enviar um resumo do seu caso pelo WhatsApp.";
+    chatOptions.classList.add("is-stacked");
+    chatOptions.append(
+      chatButton("Começar resumo", () => { chatStepIndex = 0; renderChatStep(); focusFirstChatOption(); }, "primary"),
+      chatLink("Falar direto no WhatsApp", "Olá, vim pelo site e gostaria de agendar uma consulta."),
+    );
+    return;
+  }
+
+  const step = chatSteps[chatStepIndex];
   if (!step) {
     const area = areas[chatState.area] || areas.consultoria;
     const summary = [
@@ -546,63 +586,68 @@ function renderChatStep() {
       `${modeLabels[chatState.mode] || "Preferência: a definir"}.`,
       "Gostaria de receber orientação sobre os próximos passos.",
     ].join(" ");
-
+    chatProgress.textContent = "Resumo pronto";
     chatMessage.textContent =
-      "Pronto. Organizei um resumo inicial para enviar pelo WhatsApp. A análise do caso é feita em consulta agendada com a Dra. Larissa; valores e horários são informados no primeiro contato.";
-    chatOptions.innerHTML = "";
-
-    const link = document.createElement("a");
-    link.className = "primary";
-    link.href = `https://wa.me/5532999304225?text=${encodeURIComponent(summary)}`;
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = "Enviar resumo pelo WhatsApp";
-    chatOptions.appendChild(link);
-
-    const restart = document.createElement("button");
-    restart.type = "button";
-    restart.textContent = "Refazer triagem";
-    restart.addEventListener("click", resetChat);
-    chatOptions.appendChild(restart);
+      "Pronto! Seu resumo está organizado. A análise do caso é feita em consulta agendada (paga); valores e horários são informados no primeiro contato.";
+    chatOptions.classList.add("is-stacked");
+    chatOptions.append(chatLink("Enviar resumo pelo WhatsApp", summary), chatButton("Recomeçar", resetChat));
     return;
   }
 
+  chatProgress.textContent = `Passo ${chatStepIndex + 1} de ${chatSteps.length}`;
   chatMessage.textContent = step.message;
-  chatOptions.innerHTML = "";
-
   const options = typeof step.options === "function" ? step.options(chatState) : step.options;
-
   options.forEach(([value, label]) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = label || value;
-    button.addEventListener("click", () => {
+    chatOptions.appendChild(chatButton(label || value, () => {
       chatState[step.key] = value;
       chatStepIndex += 1;
       renderChatStep();
-    });
-    chatOptions.appendChild(button);
+      focusFirstChatOption();
+    }));
   });
 }
 
 function resetChat() {
   Object.keys(chatState).forEach((key) => delete chatState[key]);
-  chatStepIndex = 0;
+  chatStepIndex = -1;
   renderChatStep();
+  focusFirstChatOption();
 }
 
-chatToggle.addEventListener("click", () => {
-  const isOpening = chatPanel.hidden;
-  chatPanel.hidden = !isOpening;
-  chatToggle.setAttribute("aria-expanded", String(isOpening));
-  if (isOpening) renderChatStep();
+function openChat() {
+  chatOpener = document.activeElement instanceof HTMLElement ? document.activeElement : chatToggle;
+  chatPanel.hidden = false;
+  chatBackdrop.hidden = !phone.matches;
+  chatWidget.classList.add("is-open");
+  chatToggle.setAttribute("aria-expanded", "true");
+  renderChatStep();
+  requestAnimationFrame(() => chatPanel.classList.add("is-visible"));
+  focusFirstChatOption();
   syncChatTuck();
-});
+}
 
-chatClose.addEventListener("click", () => {
+function closeChat() {
+  if (chatPanel.hidden) return;
+  chatPanel.classList.remove("is-visible");
   chatPanel.hidden = true;
+  chatBackdrop.hidden = true;
+  chatWidget.classList.remove("is-open");
   chatToggle.setAttribute("aria-expanded", "false");
+  (chatOpener && document.contains(chatOpener) ? chatOpener : chatToggle).focus({ preventScroll: true });
   syncChatTuck();
+}
+
+chatToggle.addEventListener("click", () => (chatPanel.hidden ? openChat() : closeChat()));
+chatClose.addEventListener("click", closeChat);
+chatBackdrop.addEventListener("click", closeChat);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !chatPanel.hidden) {
+    event.preventDefault();
+    closeChat();
+  }
+});
+document.addEventListener("pointerdown", (event) => {
+  if (!chatPanel.hidden && !chatWidget.contains(event.target)) closeChat();
 });
 
 const lectureCarousel = document.querySelector("[data-carousel]");
@@ -641,3 +686,32 @@ if (lectureCarousel) {
 
   showLectureSlide(0);
 }
+
+// Presentation video: nothing loads until the visitor presses play.
+const videoBox = document.querySelector("[data-video]");
+if (videoBox) {
+  const player = videoBox.querySelector("[data-video-player]");
+  const cover = videoBox.querySelector("[data-video-play]");
+  cover.addEventListener("click", () => {
+    videoBox.classList.add("is-playing");
+    player.controls = true;
+    cover.hidden = true;
+    player.focus({ preventScroll: true });
+    player.play().catch(() => {});
+  });
+}
+
+// Header gets slightly more compact once the page scrolls.
+const siteHeader = document.querySelector(".site-header");
+const headerSentinel = document.createElement("div");
+headerSentinel.setAttribute("aria-hidden", "true");
+headerSentinel.className = "header-sentinel";
+document.body.prepend(headerSentinel);
+new IntersectionObserver(([entry]) => {
+  siteHeader.classList.toggle("is-compact", !entry.isIntersecting);
+}).observe(headerSentinel);
+
+// Stop the orbit while the tab is hidden.
+document.addEventListener("visibilitychange", () => {
+  portraitOrbit.classList.toggle("is-tab-hidden", document.hidden);
+});
