@@ -3503,6 +3503,69 @@ h3 {
   letter-spacing: 0.14em;
 }
 
+/* Vertical photos in the square stage: crop, never stretch. */
+.lecture-slide-portrait img {
+  object-position: 50% 22%;
+}
+
+.lecture-slide-badge img {
+  object-position: 50% 40%;
+}
+
+/* Six slides: keep arrows, dots and counter on one row on phones. */
+@media (max-width: 560px) {
+  .carousel-controls {
+    gap: 8px;
+  }
+
+  .carousel-count {
+    display: none;
+  }
+
+  .carousel-dots button {
+    width: 30px;
+  }
+
+  .carousel-dots button.active {
+    width: 40px;
+  }
+}
+
+.lecture-latest {
+  margin: 4px 0 26px;
+  padding: 18px 0 18px 18px;
+  border-left: 2px solid var(--gold);
+}
+
+.lecture-latest-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gold-text);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lecture-latest h3 {
+  margin-bottom: 12px;
+  font-size: clamp(1.3rem, 1.6vw, 1.6rem);
+  line-height: 1.15;
+}
+
+.lecture-latest blockquote {
+  margin: 14px 0 0;
+}
+
+.lecture-copy .lecture-latest blockquote p {
+  margin: 0;
+  color: var(--wine-deep);
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 1.4vw, 1.3rem);
+  font-style: italic;
+  line-height: 1.4;
+}
+
 /* ---------- Orientação inicial ---------- */
 .diagnostic-steps {
   margin: 34px 0 0;
