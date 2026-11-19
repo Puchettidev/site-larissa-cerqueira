@@ -236,14 +236,30 @@ async function performanceSample(browser, url) {
     await page.locator("[data-chat-toggle]").click();
     assert.equal(await page.locator("[data-chat-panel]").isVisible(), true);
     await page.locator("[data-chat-close]").click();
-    await page.locator("[data-carousel-next]").click();
-    assert.equal(await page.locator("[data-slide].active").count(), 1);
+    // Each event has its own tab, panel and carousel.
+    await page.locator("#palestras").scrollIntoViewIfNeeded();
+    assert.equal(await page.locator("[data-event-panel]:visible").count(), 1);
+    assert.equal(await page.locator("#evento-congresso").isVisible(), true);
+    await page.locator("#evento-congresso [data-carousel-next]").click();
+    assert.equal(await page.locator("#evento-congresso [data-slide].active").count(), 1);
+    assert.equal(await page.locator("#evento-congresso [data-carousel-current]").textContent(), "02");
+    await page.locator("#aba-palestra").click();
+    assert.equal(await page.locator("#aba-palestra").getAttribute("aria-selected"), "true");
+    assert.equal(await page.locator("#evento-congresso").isVisible(), false);
+    assert.equal(await page.locator("#evento-palestra").isVisible(), true);
+    await page.locator("#evento-palestra [data-carousel-next]").click();
+    assert.equal(await page.locator("#evento-palestra [data-slide].active").count(), 1);
+    await page.locator("#aba-palestra").focus();
+    await page.keyboard.press("ArrowLeft");
+    assert.equal(await page.locator("#aba-congresso").getAttribute("aria-selected"), "true");
+    assert.equal(await page.evaluate(() => document.activeElement.id), "aba-congresso");
     const staticContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     const staticPage = await staticContext.newPage();
     await staticPage.goto(url);
     assert.equal(await staticPage.locator(".orbit-chip:visible").count(), 6);
     assert.equal(await staticPage.locator(".map-node:visible").count(), 10);
     assert.equal(await staticPage.locator("h1").count(), 1);
+    assert.equal(await staticPage.locator("[data-event-panel]:visible").count(), 2, "Events hidden without JavaScript");
     await staticContext.close();
     report.functional = "Map, orbit, keyboard, pause/resume, reduced motion, mobile navigation, diagnostic, chat and carousel passed";
     report.performance = {

@@ -655,9 +655,7 @@ document.addEventListener("pointerdown", (event) => {
   if (!chatPanel.hidden && !chatWidget.contains(event.target)) closeChat();
 });
 
-const lectureCarousel = document.querySelector("[data-carousel]");
-
-if (lectureCarousel) {
+document.querySelectorAll("[data-carousel]").forEach((lectureCarousel) => {
   const slides = Array.from(lectureCarousel.querySelectorAll("[data-slide]"));
   const dots = Array.from(lectureCarousel.querySelectorAll("[data-carousel-dot]"));
   const prevButton = lectureCarousel.querySelector("[data-carousel-prev]");
@@ -736,6 +734,36 @@ if (lectureCarousel) {
   });
 
   showLectureSlide(0);
+});
+
+// One tab per event: photos and text of each event stay together.
+const eventTabList = document.querySelector("[data-event-tabs]");
+if (eventTabList) {
+  const tabs = Array.from(eventTabList.querySelectorAll("[data-event-tab]"));
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute("aria-controls")));
+
+  function selectEventTab(index, focus = false) {
+    tabs.forEach((tab, tabIndex) => {
+      const selected = tabIndex === index;
+      tab.setAttribute("aria-selected", String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      panels[tabIndex].hidden = !selected;
+    });
+    if (focus) tabs[index].focus();
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => selectEventTab(index));
+    tab.addEventListener("keydown", (event) => {
+      const keys = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: tabs.length - 1 };
+      if (!(event.key in keys)) return;
+      event.preventDefault();
+      selectEventTab((keys[event.key] + tabs.length) % tabs.length, true);
+    });
+  });
+
+  eventTabList.hidden = false;
+  selectEventTab(0);
 }
 
 // Presentation video: nothing loads until the visitor presses play.
